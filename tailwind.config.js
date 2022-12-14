@@ -16,6 +16,7 @@ module.exports = {
       },
       backgroundImage: {
         "pattern-bg": "url('/pattern-bg.png')",
+        "icon-bg": "url('/icon-arrow.svg')",
       },
     },
   },

@@ -26,18 +26,25 @@ const InputField = ({
         <input
           type={"text"}
           placeholder={placeholder}
-          className={"w-[50vw] max-w-lg rounded-l-2xl px-4 focus:outline-none"}
+          className={
+            "w-[50vw] max-w-lg cursor-pointer rounded-l-2xl p-4 focus:outline-none"
+          }
           ref={inputField}
           pattern={pattern}
           title={"Enter a valid IP address in the format '192.168.0.1'"}
         />
         <div
-          className={
-            "flex cursor-pointer flex-col justify-center self-stretch rounded-r-2xl bg-very-dark-gray p-4"
-          }
-          // onClick={handleSetIpAddress}
+          className={"flex cursor-pointer flex-col justify-center self-stretch"}
         >
-          <input type={"submit"} />
+          <div className={"h-14 w-12 overflow-hidden rounded-r-2xl p-0"}>
+            <input
+              type={"submit"}
+              value={""}
+              className={
+                "h-14 w-12 cursor-pointer rounded-r-2xl bg-black bg-icon-bg bg-center bg-no-repeat hover:bg-very-dark-gray"
+              }
+            />
+          </div>
           {/*<Image src={iconArrow} alt={"Icon Arrow"} className={""} />*/}
         </div>
       </div>

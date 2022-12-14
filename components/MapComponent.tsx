@@ -14,6 +14,7 @@ const MapComponent = ({ className, position }: IMapComponentProps) => {
       zoom={5}
       scrollWheelZoom={true}
       className={className}
+      zoomControl={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -21,7 +22,7 @@ const MapComponent = ({ className, position }: IMapComponentProps) => {
       />
       <Marker position={position}>
         <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
+          This is your estimated location. <br />
         </Popup>
       </Marker>
     </MapContainer>
