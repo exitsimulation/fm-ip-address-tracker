@@ -25,9 +25,8 @@ interface IMapComponentProps {
   className?: string;
 }
 
-interface IMapProps {
-  children?: React.ReactNode;
-  className?: string;
+interface IHeadProps {
+  title: string;
+  description?: string;
+  url?: string;
 }
-
-interface MapProps extends LeafletMapProps {}

@@ -15,10 +15,6 @@ export default function Home() {
     isp: "SpaceX, Starlink",
   };
 
-  // const MapWithNoSSR = dynamic(() => import("./components/MapComponent"), {
-  //   ssr: false,
-  // });
-
   const MapWithNoSSR = dynamic(() => import("./components/MapComponent"), {
     ssr: false,
   });
@@ -50,8 +46,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <MapComponent className={"overflow-hidden"}></MapComponent>
-      {/*<MapWithNoSSR />*/}
+      {/*<MapComponent className={"overflow-hidden"}></MapComponent>*/}
+      <MapWithNoSSR />
       <FloatingBox
         className={
           "absolute top-[350px] left-2/4 flex w-[90vw] -translate-x-1/2 -translate-y-1/2 flex-col justify-between divide-solid rounded-2xl bg-stone-100 p-4 md:top-[250px] md:w-2/3 md:flex-row md:divide-x"
