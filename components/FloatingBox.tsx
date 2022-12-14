@@ -1,4 +1,4 @@
-import { IFloatingBoxProps } from "../../user";
+import { IFloatingBoxProps } from "../user";
 import FloatingBoxItem from "./FloatingBoxItem";
 
 const FloatingBox = ({

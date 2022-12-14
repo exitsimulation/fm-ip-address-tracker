@@ -3,8 +3,7 @@ import Image from "next/image";
 import { IQueryResponse } from "../user";
 import dynamic from "next/dynamic";
 import iconArrow from "../public/icon-arrow.svg";
-import MapComponent from "../app_old/components/MapComponent";
-import FloatingBox from "../app_old/components/FloatingBox";
+import FloatingBox from "../components/FloatingBox";
 
 export default function Home() {
   let templateResponse: IQueryResponse = {
