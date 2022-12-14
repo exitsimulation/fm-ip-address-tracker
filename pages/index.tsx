@@ -1,18 +1,64 @@
 import Head from "next/head";
-import Image from "next/image";
-import { IQueryResponse } from "../user";
 import dynamic from "next/dynamic";
-import iconArrow from "../public/icon-arrow.svg";
 import FloatingBox from "../components/FloatingBox";
+import useSWR from "swr";
 
-export default function Home() {
-  let templateResponse: IQueryResponse = {
+import { useEffect, useState } from "react";
+import InputField from "../components/InputField";
+import { LatLngExpression } from "leaflet";
+import { NextApiRequest } from "next";
+
+/*
+Fetcher is basically a wrapper around the standard fetch function
+It is needed for passing it into the uswSWR(...) hook
+ */
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const regex_ipv4 =
+  "(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
+
+export default function Home({ ip }: { ip: string | undefined }) {
+  const [position, setPosition] = useState<LatLngExpression>({
+    lat: 51.505,
+    lng: -0.09,
+  });
+
+  const [ipQueryResponse, setIpQueryResponse] = useState({
     ipAddress: "192.212.174.101",
     location: "Brooklyn, NY 10001",
     timezone: "UTC-05:00",
     isp: "SpaceX, Starlink",
-  };
+  });
 
+  const [ipAddress, setIpAddress] = useState(ip);
+
+  /*
+  https://swr.vercel.app/
+   */
+  const { data, error } = useSWR("/api/ip/" + `${ipAddress}`, fetcher);
+
+  useEffect(() => {
+    setIpQueryResponse({
+      ipAddress: data?.ip || "undefined",
+      location: `${data?.location?.city || "undefined"}, ${
+        data?.location?.region
+      } ${data?.location?.postalCode}`,
+      timezone: `UTC${data?.location?.timezone || "-undefined"}`,
+      isp: data?.isp || "undefined",
+    });
+
+    console.log(data);
+    console.log(ip);
+
+    setPosition({
+      lat: data?.location?.lat || 51.505,
+      lng: data?.location?.lng || -0.09,
+    });
+  }, [data]);
+
+  /*
+  Dynamically load map component, so it is not rendered on the server. LeafletJS needs a window object and this would not be available in SSR
+  https://stackoverflow.com/a/64634759
+   */
   const MapWithNoSSR = dynamic(() => import("../components/MapComponent"), {
     ssr: false,
   });
@@ -33,32 +79,45 @@ export default function Home() {
           <div className={"m-6 text-center text-3xl text-stone-100"}>
             IP Address Tracker
           </div>
-          <div className={"flex flex-row justify-center"}>
-            <input
-              type={"text"}
-              placeholder={"Search for any IP address or domain"}
-              className={
-                "w-[50vw] max-w-lg rounded-l-2xl px-4 focus:outline-none"
-              }
-            />
-            <div
-              className={
-                "flex flex-col justify-center self-stretch rounded-r-2xl bg-very-dark-gray p-4 "
-              }
-            >
-              <Image src={iconArrow} alt={"Icon Arrow"} className={""} />
-            </div>
-          </div>
+
+          <InputField
+            placeholder={"Search for any IP address or domain"}
+            className={"flex flex-row justify-center"}
+            setIpAddress={setIpAddress}
+            pattern={regex_ipv4}
+          />
         </div>
         {/*<MapComponent className={"overflow-hidden"}></MapComponent>*/}
-        <MapWithNoSSR className={"overflow-hidden"} />
+        <MapWithNoSSR
+          position={position}
+          className={"overflow-hidden bg-very-dark-gray"}
+        />
         <FloatingBox
           className={
-            "absolute top-[350px] left-2/4 flex w-[90vw] -translate-x-1/2 -translate-y-1/2 flex-col justify-between divide-solid rounded-2xl bg-stone-100 p-4 md:top-[250px] md:w-2/3 md:flex-row md:divide-x"
+            "absolute top-[350px] left-2/4 z-[500] flex w-[90vw] -translate-x-1/2 -translate-y-1/2 flex-col justify-between divide-solid rounded-2xl bg-stone-100 p-4 md:top-[250px] md:w-2/3 md:flex-row md:divide-x"
           }
-          queryResponse={templateResponse}
+          queryResponse={ipQueryResponse}
         />
       </div>
     </>
   );
 }
+
+/*
+Get client IP address
+https://stackoverflow.com/a/72002568
+ */
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const forwarded = req.headers["x-forwarded-for"];
+
+  const ip =
+    typeof forwarded === "string"
+      ? forwarded.split(/, /)[0]
+      : req.socket.remoteAddress;
+
+  console.log(ip);
+
+  return {
+    props: { ip },
+  };
+};
