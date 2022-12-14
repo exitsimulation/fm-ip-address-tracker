@@ -6,7 +6,18 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "very-dark-gray": "hsl(0 0% 17%)",
+        "dark-gray": "hsl(0 0% 59%)",
+      },
+      fontFamily: {
+        rubik: ["Rubik", "sans-serif"],
+      },
+      backgroundImage: {
+        "pattern-bg": "url('/pattern-bg.png')",
+      },
+    },
   },
   plugins: [],
-}
+};
