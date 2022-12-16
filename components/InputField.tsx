@@ -1,6 +1,4 @@
 import { IInputFieldProps } from "../user";
-import Image from "next/image";
-import iconArrow from "../public/icon-arrow.svg";
 import React, { useRef } from "react";
 
 const InputField = ({
@@ -27,7 +25,7 @@ const InputField = ({
           type={"text"}
           placeholder={placeholder}
           className={
-            "w-[50vw] max-w-lg cursor-pointer rounded-l-2xl p-4 focus:outline-none"
+            "w-[75vw] cursor-pointer rounded-l-2xl p-4 focus:outline-none md:w-[50vw] md:max-w-lg"
           }
           ref={inputField}
           pattern={pattern}
