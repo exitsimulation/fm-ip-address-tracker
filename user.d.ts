@@ -45,3 +45,8 @@ interface IInputFieldProps {
   children?: React.ReactNode;
   className: string;
 }
+
+interface IAttributionProps {
+  children?: React.ReactNode;
+  className?: string;
+}
